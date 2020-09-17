@@ -3,7 +3,9 @@
 # https://stackoverflow.com/a/48882051
 - name: "ssh | fetch authorized admin keys"
   set_fact:
-    admin_keys: "{% for key in lookup('fileglob', 'public_keys/*.pub').split(',') %}{{ lookup('file', key) ~ '\n'}}{% endfor %}"
+    admin_keys: >
+      {% for key in lookup('fileglob', 'public_keys/*.pub').split(',') %}{{ lookup('file', key) ~ '\n'}}
+      {% endfor %}
   tags:
     - ssh
 
