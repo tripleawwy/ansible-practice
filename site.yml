@@ -1,8 +1,10 @@
 ---
-# file: site.yml
 # This is the top level playbook that defines our entire infrastructure.
 - hosts: all
   gather_facts: true
 
 - import_playbook: playbooks/common.yml
   tags: common
+
+- import_playbook: playbooks/dockerhosts.yml
+  tags: docker
