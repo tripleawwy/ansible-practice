@@ -1,0 +1,64 @@
+---
+- name: "ufw | install"
+  apt:
+    name: ufw
+    state: present
+
+- name: "ufw | set ipv6"
+  lineinfile:
+    dest: /etc/default/ufw
+    regexp: '^IPV6='
+    line: "IPV6={{ ufw_ipv6 }}"
+    state: present
+
+- name: "ufw | reset"
+  ufw:
+    state: reset
+  when: ufw_force_reset | default(False)
+
+- name: "ufw | allow ssh unlimited from trusted hosts"
+  ufw:
+    rule: allow
+    port: "{{ ssh_port | default('22') }}"
+    proto: tcp
+    from_ip: "{{ item }}"
+  loop: "{{ ufw_ssh_trusted_hosts | flatten(levels=1) }}"
+  when: (ufw_ssh_trusted_hosts | default([])) | length > 0
+
+# Never remove this rule to prevent locking yourself out
+- name: "ufw | limit ssh for others"
+  ufw:
+    rule: limit
+    port: "{{ ssh_port | default('22') }}"
+    proto: tcp
+
+- name: "ufw | configure ufw rules"
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto | default('tcp') }}"
+    from_ip: "{{ item.from | default('any') }}"
+    to_ip: "{{ item.to | default('any') }}"
+    delete: "{{ item.delete | default('no') }}"
+  with_items:
+    - "{{ ufw_config | default([]) }}"
+
+- name: "ufw | allow outgoing connections by default"
+  ufw:
+    policy: allow
+    direction: outgoing
+
+- name: "ufw | deny incoming connections by default"
+  ufw:
+    policy: deny
+    direction: incoming
+
+- name: "ufw | enable"
+  ufw:
+    state: enabled
+
+- name: "ufw | start service"
+  service:
+    name: ufw
+    state: started
+    enabled: true

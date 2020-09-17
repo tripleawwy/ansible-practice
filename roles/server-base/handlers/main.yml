@@ -1,0 +1,19 @@
+---
+- name: restart ntp
+  service:
+    name: chrony
+    state: restarted
+
+- name: new aliases
+  command: newaliases
+
+- name: restart ssh
+  service: name=ssh state=restarted
+
+- name: update ca-certificates
+  command: /usr/sbin/update-ca-certificates
+
+- name: restart cron
+  service:
+    name: cron
+    state: restarted

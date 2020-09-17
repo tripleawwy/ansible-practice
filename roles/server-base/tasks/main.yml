@@ -1,0 +1,9 @@
+---
+- name: add distribution-specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Debian install
+  tags:
+    - os-base
+  include_tasks: debian.yml
+  when: ansible_os_family | lower == 'debian'

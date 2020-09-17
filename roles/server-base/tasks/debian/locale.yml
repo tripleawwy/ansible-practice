@@ -1,0 +1,23 @@
+---
+- name: "locale | Install"
+  apt:
+    name: locales
+    state: present
+
+- name: "locale | Create"
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ locale_install }}"
+  tags:
+    - locale
+
+- name: "locale | Set default locale"
+  template:
+    src: etc/default/locale.j2
+    dest: /etc/default/locale
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - locale

@@ -1,0 +1,51 @@
+---
+- name: Setup timezone
+  include_tasks: debian/time.yml
+  tags:
+    - time
+  when: setup_time | bool
+
+- name: Manages packages
+  include_tasks: debian/packages.yml
+  tags:
+    - packages
+
+- name: Setup ntp
+  include_tasks: debian/ntp.yml
+  when: setup_ntp | bool
+
+- name: Setup resolv.conf
+  include_tasks: debian/resolv.yml
+  tags:
+    - resolv
+  when: setup_resolv | bool
+
+- name: Setup locales
+  include_tasks: debian/locale.yml
+  tags:
+    - locale
+  when: setup_locale | bool
+
+- name: Setup aliases
+  include_tasks: debian/aliases.yml
+  tags:
+    - aliases
+  when: setup_aliases | bool
+
+- name: Setup ssh and add authorized keys
+  include_tasks: debian/ssh.yml
+  tags:
+    - ssh
+  when: setup_ssh | bool
+
+- name: Setup uncomplicated firewall
+  include_tasks: debian/ufw.yml
+  tags:
+    - ufw
+  when: setup_ufw | bool
+
+- name: Setup unattended-upgrades
+  include_tasks: debian/unattended.yml
+  tags:
+    - unattended
+  when: setup_unattended_upgrades | bool

@@ -1,0 +1,27 @@
+---
+- name: "ntp | remove obsolete packages"
+  apt:
+    name:
+      - ntp
+      - ntpdate
+    state: absent
+
+- name: "ntp | install"
+  apt:
+    name: chrony
+    state: present
+
+- name: "ntp | configure"
+  template:
+    src: etc/chrony/chrony.conf.j2
+    dest: "{{ ntp_chrony_config }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ntp
+
+- name: "ntp | start"
+  service:
+    name: chrony
+    state: started
+    enabled: true

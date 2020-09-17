@@ -1,0 +1,14 @@
+---
+- name: "time | install time zone data"
+  apt:
+    name: tzdata
+    state: present
+  tags:
+    - time
+
+- name: "time | set timezone"
+  timezone:
+    name: "{{ time_zone }}"
+  notify: restart cron
+  tags:
+    - time

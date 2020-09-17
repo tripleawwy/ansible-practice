@@ -1,0 +1,19 @@
+---
+# file: common.yml
+- name: Apply common basic configuration to all servers
+  hosts: managed
+  gather_facts: false
+  pre_tasks:
+  - name: Install Python (if not happened, yet)
+    raw: "bash -c 'test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)'"
+    register: output
+    changed_when: output.stdout != ""
+  - name: Ensure 'lsb-release' is installed
+    apt:
+      name: lsb-release
+      state: present
+    ignore_errors: true
+  - name: Gathering facts
+    setup:
+  roles:
+    - roles/server-base

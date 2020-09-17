@@ -1,0 +1,80 @@
+---
+# run all tasks by default
+setup_ssh: true
+setup_ufw: true
+setup_resolv: true
+setup_locale: true
+setup_time: true
+setup_ntp: true
+setup_unattended_upgrades: true
+setup_aliases: true
+
+# Software packages
+packages:
+  base:
+    - aptitude
+    - curl
+    - dnsutils
+    - git
+    - htop
+    - iotop
+    - iputils-ping
+    - net-tools
+    - screen
+    - sudo
+    - sysstat
+    - tmux
+    - traceroute
+    - unzip
+    - vim
+    - wget
+
+# NTP settings
+ntp_chrony_config: '/etc/chrony/chrony.conf'
+ntp_server: 'ntp.netresearch.nr'
+ntp_server_pool:
+  - '0.pool.ntp.org'
+  - '1.pool.ntp.org'
+  - '2.pool.ntp.org'
+  - '3.pool.ntp.org'
+ntp_logging_enabled: false
+
+# ufw configuration
+ufw_ipv6: "no"
+
+resolv_nameservers:
+  - 192.168.178.1
+
+resolv_search:
+  - fritz.box
+
+# locale configuration
+locale_default: en_US.UTF-8
+locale_install:
+  - de_DE.UTF-8
+  - en_US.UTF-8
+locale_messages: en_US.UTF-8
+
+# time configuration
+time_zone: Etc/UTC
+
+# unattended upgrades configuration
+unattended_upgrade: 1
+unattended_upgrade_interval: 1
+unattended_update_package_list: 1
+unattended_download_upgradeable: 1
+unattended_autoclean_interval: 7
+unattended_clean_interval: 0
+unattended_verbose: 2
+unattended_origins_patterns: []
+unattended_package_blacklist: []
+unattended_autofix_interrupted_dpkg: "true"
+unattended_minimal_steps: "true"
+unattended_install_on_shutdown: "false"
+unattended_mail: "root"
+unattended_mail_only_on_error: "false"
+unattended_remove_unused_dependencies: "false"
+unattended_automatic_reboot: "false"
+unattended_automatic_reboot_with_users: "false"
+unattended_automatic_reboot_time: "02:00"
+unattended_ignore_apps_require_restart: "false"

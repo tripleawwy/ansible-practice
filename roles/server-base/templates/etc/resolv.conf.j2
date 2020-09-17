@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+{% if resolv_search %}
+search {{ resolv_search|join(' ') }}
+{% endif %}
+{% for i in resolv_nameservers %}
+nameserver {{ i }}
+{% endfor %}

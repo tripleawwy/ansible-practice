@@ -1,0 +1,21 @@
+---
+image:
+  #imagename for the buildbox
+  name: buildbox
+
+before_script:
+  # remove write permissions for group and others
+  # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#avoiding-security-risks-with-ansible-cfg-in-the-current-directory
+  - chmod -R g-w,o-w ./
+  - ansible --version
+  - ansible-lint --version
+  - yamllint --version
+
+stages:
+  - validate
+
+validate:
+  stage: validate
+  script:
+    - ansible-lint ./
+    - yamllint ./

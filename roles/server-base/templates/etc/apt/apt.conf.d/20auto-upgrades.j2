@@ -1,0 +1,22 @@
+// {{ ansible_managed }}
+
+// Enable unattended upgrades.
+APT::Periodic::Enable "{{ unattended_upgrade }}";
+
+// Do "apt-get update" every n-days
+APT::Periodic::Update-Package-Lists "{{ unattended_update_package_list }}";
+
+// Do "apt-get upgrade" every n-days
+APT::Periodic::Unattended-Upgrade "{{ unattended_upgrade_interval }}";
+
+// Do "apt-get upgrade --download-only" every n-days
+APT::Periodic::Download-Upgradeable-Packages "{{ unattended_download_upgradeable }}";
+
+// Do "apt-get autoclean" every n-days
+APT::Periodic::AutocleanInterval "{{ unattended_autoclean_interval }}";
+
+// Do "apt-get clean" every n-days
+APT::Periodic::CleanInterval "{{ unattended_clean_interval }}";
+
+// Define verbosity level
+APT::Periodic::Verbose "{{ unattended_verbose }}";

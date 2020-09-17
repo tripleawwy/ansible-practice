@@ -1,0 +1,26 @@
+---
+- name: "packages | Manage base packages"
+  apt:
+    name: "{{ packages.base | default([]) }}"
+    state: present
+    install_recommends: false
+  register: packages_action
+  tags:
+    - packages
+
+- name: "packages | Install VMware tools for VMware guest"
+  apt:
+    name: open-vm-tools
+    state: present
+  when:
+    - ansible_virtualization_role == "guest"
+    - ansible_virtualization_type == "VMware"
+  tags:
+    - packages
+
+- name: "packages | Distro updates"
+  apt:
+    upgrade: dist
+    cache_valid_time: 3600
+  tags:
+    - packages

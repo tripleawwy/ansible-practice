@@ -1,0 +1,29 @@
+---
+# Ansiblize authorized_keys exclusive with multiple keys:
+# https://stackoverflow.com/a/48882051
+- name: "ssh | fetch authorized admin keys"
+  set_fact:
+    admin_keys: "{% for key in lookup('fileglob', 'public_keys/*.pub').split(',') %}{{ lookup('file', key) ~ '\n'}}{% endfor %}"
+  tags:
+    - ssh
+
+- name: "ssh | fetch additional authorized keys from list variable"
+  set_fact:
+    additional_keys: "{{ (ssh_root_authorized_keys | default([])) | join('\n') }}"
+  tags:
+    - ssh
+
+- name: "ssh | merge authorized keys"
+  set_fact:
+    authorized_keys: "{{ admin_keys }}{{ additional_keys }}"
+  tags:
+    - ssh
+
+- name: "ssh | add authorized keys for root user"
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ authorized_keys }}"
+    exclusive: true
+  tags:
+    - ssh
